@@ -55,8 +55,8 @@ class Transaksi:
 
     @catat_aktivitas
     def tambah_produk(self, produk, jumlah):
-        if not isinstance(produk, Produk):
-            raise TypeError("Produk harus berupa objek Produk.")
+       if not all(hasattr(produk, a) for a in ("nama", "harga", "stok")):
+            raise TypeError("Data produk tidak valid.")
         if not isinstance(jumlah, int) or jumlah <= 0:
             raise ValueError("Jumlah harus lebih dari 0.")
         if jumlah > produk.stok:
