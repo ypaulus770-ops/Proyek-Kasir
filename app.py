@@ -53,20 +53,28 @@ class Transaksi:
             raise ValueError("Nama kasir wajib diisi.")
         self.kasir, self.items, self.total = kasir.strip(), [], 0
 
-    @catat_aktivitas
+@catat_aktivitas
     def tambah_produk(self, produk, jumlah):
-       if not all(hasattr(produk, a) for a in ("nama", "harga", "stok")):
+        if not all(hasattr(produk, a) for a in ("nama", "harga", "stok")):
             raise TypeError("Data produk tidak valid.")
+
         if not isinstance(jumlah, int) or jumlah <= 0:
             raise ValueError("Jumlah harus lebih dari 0.")
+
         if jumlah > produk.stok:
             raise ValueError(f"Stok {produk.nama} tidak mencukupi.")
+
         produk.stok -= jumlah
         subtotal = produk.harga * jumlah
-        self.items.append({"nama": produk.nama, "harga": produk.harga,
-                           "jumlah": jumlah, "subtotal": subtotal})
-        self.total += subtotal
 
+        self.items.append({
+            "nama": produk.nama,
+            "harga": produk.harga,
+            "jumlah": jumlah,
+            "subtotal": subtotal
+        })
+
+        self.total += subtotal
     @validasi_pembayaran
     @catat_aktivitas
     def bayar(self, uang):
